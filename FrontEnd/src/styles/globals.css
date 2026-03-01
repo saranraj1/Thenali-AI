@@ -1,0 +1,353 @@
+@import "tailwindcss";
+
+@source "../**/*.{js,ts,jsx,tsx,mdx}";
+
+@theme {
+    /* Lovable AI / Modern SaaS Palette */
+    --color-saffron: #ff9933;
+    --color-green-bharat: #138808;
+    --color-navy-bharat: #000080;
+
+    --color-brand-primary: #ff9933;
+    --color-brand-secondary: #138808;
+
+    --color-background: #02040a;
+    --color-foreground: #ffffff;
+
+    /* Animations */
+    --animate-float: float 6s ease-in-out infinite;
+    --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        background-color: #02040a;
+        color: #ffffff;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+    }
+
+    * {
+        @apply border-white/5;
+    }
+}
+
+@layer components {
+
+    /* Lovable Mesh Gradient - Animated & Fluid */
+    .lovable-mesh {
+        @apply relative overflow-hidden bg-[#02040a];
+    }
+
+    .lovable-mesh::before {
+        content: '';
+        @apply absolute -top-[20%] -left-[10%] w-[70%] h-[70%] rounded-full blur-[120px] opacity-20;
+        background: radial-gradient(circle, var(--color-saffron) 0%, transparent 70%);
+        animation: float 20s infinite alternate;
+        will-change: transform;
+        transform: translateZ(0);
+    }
+
+    .lovable-mesh::after {
+        content: '';
+        @apply absolute -bottom-[20%] -right-[10%] w-[60%] h-[60%] rounded-full blur-[100px] opacity-20;
+        background: radial-gradient(circle, var(--color-green-bharat) 0%, transparent 70%);
+        animation: float 25s infinite alternate-reverse;
+        will-change: transform;
+        transform: translateZ(0);
+    }
+
+    /* Lovable Card Style */
+    .lovable-card {
+        @apply relative bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[32px] overflow-hidden transition-all duration-500;
+        box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
+        /* GPU Buffering */
+        will-change: transform, opacity;
+        transform: translateZ(0);
+    }
+
+    .lovable-card:hover {
+        @apply bg-white/[0.05] border-white/20 -translate-y-1;
+        box-shadow: 0 20px 40px -10px rgba(255, 153, 51, 0.1);
+    }
+
+    /* Lovable Button */
+    .lovable-btn {
+        @apply relative inline-flex items-center justify-center px-8 py-4 rounded-full font-bold transition-all duration-300 active:scale-95;
+        background: linear-gradient(135deg, var(--color-saffron) 0%, #ffcc66 100%);
+        color: white;
+        box-shadow: 0 10px 20px -5px rgba(255, 153, 51, 0.4);
+        /* GPU Buffering */
+        will-change: transform;
+        transform: translateZ(0);
+    }
+
+    .lovable-btn:hover {
+        @apply scale-105;
+        box-shadow: 0 15px 30px -5px rgba(255, 153, 51, 0.6);
+    }
+
+    /* Modern Gradient Text - Aggressive spatial buffering to prevent italic clipping */
+    .lovable-text-gradient {
+        @apply bg-clip-text text-transparent bg-gradient-to-r from-saffron via-white to-green-bharat;
+        display: inline-block;
+        /* Strategic padding for italic slant and descenders */
+        padding: 0.15em 0.25em;
+        margin: -0.15em -0.25em;
+        /* Reset line-height to ensure the bounding box encompasses the full glyph */
+        line-height: 1.2;
+    }
+
+    /* Glass Navbar — always fixed on top */
+    .lovable-nav {
+        position: fixed;
+        top: 1.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 80rem;
+        height: 5rem;
+        padding-left: 2rem;
+        padding-right: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        z-index: 9999;
+        border-radius: 9999px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.04);
+    }
+}
+
+@keyframes float {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+
+    33% {
+        transform: translate(2%, 4%) rotate(2deg);
+    }
+
+    66% {
+        transform: translate(-1%, 2%) rotate(-1deg);
+    }
+
+    100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+}
+
+@keyframes scan {
+    from {
+        top: -100px;
+    }
+
+    to {
+        top: 100%;
+    }
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-white/10 rounded-full;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-white/20;
+}
+
+/* Neural Legibility Protocol for Indic Scripts */
+body:not(.lang-english) {
+    /* Disable italics for scripts that don't support it well */
+    font-style: normal !important;
+    /* Adaptive scaling: slightly reduce base size for long-form languages */
+    font-size: 0.95rem;
+}
+
+body:not(.lang-english) * {
+    /* Normalizing tracking to prevent ligature breakage */
+    letter-spacing: normal !important;
+    /* Ensuring complex characters aren't clipped */
+    line-height: normal !important;
+    /* Prevent aggressive word breaks in scripts that rely on clusters */
+    word-break: keep-all !important;
+    overflow-wrap: break-word;
+    /* Smart wrapping for long Indic phrases */
+    text-wrap: balance;
+}
+
+/* Neural Adaptive Container Scaling */
+.lovable-card,
+.lovable-mesh,
+section,
+main {
+    container-type: inline-size;
+    content-visibility: auto;
+    contain-intrinsic-size: 0 500px;
+}
+
+/* Adaptive Heading Scaling (Container-Width Aware) - Selective Targeting */
+body:not(.lang-english) .text-9xl,
+body:not(.lang-english) .text-8xl,
+body:not(.lang-english) .text-7xl {
+    font-size: clamp(2.5rem, 15cqw, 7rem) !important;
+    line-height: 1 !important;
+}
+
+/* Only targeting large H1/H2 with specific sizing or in main areas, excluding sidebar/nav */
+body:not(.lang-english) main h1:not(.logo-text),
+body:not(.lang-english) main h2,
+body:not(.lang-english) .text-6xl,
+body:not(.lang-english) .text-5xl {
+    font-size: clamp(1.8rem, 10cqw, 4.5rem) !important;
+    line-height: 1.1 !important;
+}
+
+body:not(.lang-english) .text-4xl,
+body:not(.lang-english) .text-3xl,
+body:not(.lang-english) h3 {
+    font-size: clamp(1.25rem, 7cqw, 2.5rem) !important;
+}
+
+/* Ensuring small tech-labels remain visible and legible */
+body:not(.lang-english) .text-\[10px\],
+body:not(.lang-english) .text-\[9px\],
+body:not(.lang-english) .text-xs {
+    font-size: 0.75rem !important;
+    /* Scale up to at least 12px for legibility */
+    font-weight: 700 !important;
+    letter-spacing: 0.02em !important;
+}
+
+/* Fix for forced uppercase in scripts without casing */
+body:not(.lang-english) [class*="uppercase"] {
+    text-transform: none !important;
+}
+
+/* Boost contrast for Indic glyphs (many have thinner strokes) */
+body:not(.lang-english) .text-white\/20,
+body:not(.lang-english) .text-white\/30,
+body:not(.lang-english) .text-white\/40 {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Global Adaptive Text Wrapping */
+h1,
+h2,
+h3,
+p {
+    text-wrap: balance;
+}
+
+/* Prevent buttons from exploding in width */
+button,
+.lovable-btn {
+    max-width: 100%;
+    white-space: normal !important;
+    /* Allow wrapping in buttons if text is extremely long */
+    min-height: fit-content;
+}
+
+/* ═══════════════════════════════════════════════════
+   MICRO-INTERACTION POLISH
+   ═══════════════════════════════════════════════════ */
+
+/* Button press feedback — tactile feel */
+button:active:not(:disabled),
+a:active {
+    transform: scale(0.97);
+    transition: transform 0.1s ease;
+}
+
+/* Focus-visible ring system — keyboard navigation only */
+:focus-visible {
+    outline: 2px solid rgba(255, 153, 51, 0.6);
+    outline-offset: 3px;
+    border-radius: 8px;
+}
+
+/* Smooth scrollbar cross-browser */
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Interactive element cursor */
+[role="button"],
+button,
+a,
+label[for] {
+    cursor: pointer;
+}
+
+/* Disabled state */
+button:disabled,
+input:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Image drag prevention */
+img,
+svg {
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+/* Responsive text scaling */
+@media (max-width: 640px) {
+    h1 {
+        font-size: clamp(2rem, 8vw, 4rem);
+    }
+
+    h2 {
+        font-size: clamp(1.5rem, 6vw, 3rem);
+    }
+
+    /* Reduce padding on mobile cards */
+    .lovable-card {
+        border-radius: 20px;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .lovable-card {
+        border-color: rgba(255, 255, 255, 0.3) !important;
+    }
+
+    .text-white\/20,
+    .text-white\/30 {
+        color: rgba(255, 255, 255, 0.7) !important;
+    }
+}
+
+/* Reduced motion — respect user OS preference */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

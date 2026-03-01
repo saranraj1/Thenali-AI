@@ -1,0 +1,13 @@
+:root {
+  --india-saffron: #FF9933;
+  --india-white: #FFFFFF;
+  --india-green: #138808;
+  --india-blue: #000080;
+
+  --primary: var(--india-saffron);
+  --secondary: var(--india-green);
+  --accent: var(--india-blue);
+
+  --background: #f8fafc;
+  --text-main: #111827;
+}

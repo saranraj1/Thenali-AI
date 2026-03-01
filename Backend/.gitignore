@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+D:/ai_env/
+
+# Environment
+.env
+!.env.example
+
+# Data directories (large files)
+data/repos/
+data/faiss_indexes/
+data/rag/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Logs
+*.log
+logs/
+
+# AWS
+.aws/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/

@@ -1,0 +1,64 @@
+
+==================================================
+> Health Check
+==================================================
+{'status': 'healthy', 'environment': 'development', 'checks': {'dynamodb': 'healthy', 'faiss': 'healthy', 'embedding_model': 'healthy'}, 'version': '1.0.0'}
+
+==================================================
+> Authentication (Register & Login)
+==================================================
+{'access_token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyXzljMDY4Y2MwMzUxOTRjOWE4YzhhZTVhMDU2MmRiYjhkIiwiZW1haWwiOiJ0ZXN0XzE3NzI5NzM3MzdAZXhhbXBsZS5jb20iLCJ1c2VybmFtZSI6IlRlc3QgVXNlciIsImV4cCI6MTc3MzA2MDE0MX0.r2d5JYPFQOk5RT2FgpaWmBiSY9UKCwtJeBDtOGCXSpg', 'token_type': 'bearer', 'user_id': 'user_9c068cc035194c9a8c8ae5a0562dbb8d', 'username': 'Test User', 'rank': 'Novice'}
+
+==================================================
+> Profile Storage Test (Avatar Upload)
+==================================================
+{'success': True, 'user_id': 'user_9c068cc035194c9a8c8ae5a0562dbb8d', 'avatar_url': 'https://bharat-ai-profile-pictures.s3.ap-south-1.amazonaws.com/profile-pictures/user_9c068cc035194c9a8c8ae5a0562dbb8d.jpg', 's3_key': 'profile-pictures/user_9c068cc035194c9a8c8ae5a0562dbb8d.jpg', 'bucket': 'bharat-ai-profile-pictures'}
+
+==================================================
+> Repository Intelligence (Upload)
+==================================================
+{'success': True, 'repo_id': 'repo_40aab7ea8b3c43b6971edc5cbea557bf', 'repo_name': 'Hello-World', 'status': 'pending', 'message': 'Repository registered. Analysis will begin shortly.'}
+
+==================================================
+> RAG Pipeline processing...
+==================================================
+Status: analyzing
+Status: analyzed
+
+==================================================
+> Repository Intelligence (Result)
+==================================================
+{'repo_id': 'repo_40aab7ea8b3c43b6971edc5cbea557bf', 'repo_name': 'Hello-World', 'repo_url': 'https://github.com/octocat/Hello-World', 'status': 'analyzed', 'user_id': 'user_9c068cc035194c9a8c8ae5a0562dbb8d', 'created_at': '2026-03-08T12:42:27.100776+00:00', 'overview': 'No relevant code context found. Unable to generate a comprehensive intelligence report.', 'architecture_summary': '', 'complexity_score': 0.0, 'tech_stack': [], 'design_patterns': [], 'recommendations': [], 'contribution_opportunities': [], 'mermaid_diagram': '', 'risks': [], 'strengths': [], 'generated_at': '2026-03-08T12:42:33.228828+00:00'}
+
+==================================================
+> Repository Q&A (RAG)
+==================================================
+{'repo_id': 'repo_40aab7ea8b3c43b6971edc5cbea557bf', 'message': 'What does this repo do?', 'response': "I'm sorry, but I can't provide information about what this repository does because there is no relevant code context available. If you have any other questions or need analysis on a different repository, feel free to ask!", 'context_used': True}
+
+==================================================
+> Learning System (Roadmap)
+==================================================
+{'title': 'React Hooks Learning Roadmap', 'goal': 'Learn React Hooks', 'stack': ['React', 'JavaScript'], 'timeline': '2 weeks', 'total_weeks': 2, 'phases': [{'phase': 1, 'title': 'Introduction to React Hooks', 'duration_weeks': 1, 'objectives': ['Understand the basics of React Hooks', 'Learn how to use useState and useEffect'], 'concepts': [{'id': 'c1', 'name': 'What are React Hooks?', 'description': 'Learn the fundamental concept of React Hooks and why they are important.', 'resources': ['https://reactjs.org/docs/hooks-intro.html'], 'estimated_hours': 2, 'completed': False}, {'id': 'c2', 'name': 'useState Hook', 'description': 'Understand how to use the useState Hook to manage state in functional components.', 'resources': ['https://reactjs.org/docs/hooks-state.html'], 'estimated_hours': 3, 'completed': False}, {'id': 'c3', 'name': 'useEffect Hook', 'description': 'Learn how to use the useEffect Hook to perform side effects in functional components.', 'resources': ['https://reactjs.org/docs/hooks-effect.html'], 'estimated_hours': 3, 'completed': False}], 'projects': ['Create a simple counter app using useState'], 'milestones': ['Implement a counter app with increment and decrement buttons']}, {'phase': 2, 'title': 'Advanced React Hooks', 'duration_weeks': 1, 'objectives': ['Learn about custom hooks', 'Understand useContext and useReducer'], 'concepts': [{'id': 'c4', 'name': 'Custom Hooks', 'description': 'Learn how to create and use custom hooks to encapsulate and reuse stateful logic.', 'resources': ['https://reactjs.org/docs/hooks-custom.html'], 'estimated_hours': 3, 'completed': False}, {'id': 'c5', 'name': 'useContext Hook', 'description': 'Understand how to use the useContext Hook to manage global state in a React application.', 'resources': ['https://reactjs.org/docs/hooks-reference.html#usecontext'], 'estimated_hours': 3, 'completed': False}, {'id': 'c6', 'name': 'useReducer Hook', 'description': 'Learn how to use the useReducer Hook as an alternative to useState for more complex state logic.', 'resources': ['https://reactjs.org/docs/hooks-reference.html#usereducer'], 'estimated_hours': 3, 'completed': False}], 'projects': ['Build a todo list app using useReducer and useContext'], 'milestones': ['Implement a todo list app with add, delete, and toggle completion functionality']}], 'tips': ['Practice by building small projects to reinforce your learning', 'Read the official React documentation for in-depth understanding'], 'success_metrics': ['Ability to build a simple app using React Hooks', 'Understanding and implementing custom hooks'], 'id': 'rm_815a748526f942169503750f11a7f97a', 'roadmap_id': 'rm_815a748526f942169503750f11a7f97a', 'user_id': 'user_9c068cc035194c9a8c8ae5a0562dbb8d', 'created_at': '2026-03-08T12:42:50.737677+00:00'}
+
+==================================================
+> Learning System (Concept Module)
+==================================================
+{'title': 'Mastering the useState Hook in React', 'topic': 'useState hook', 'difficulty': 'intermediate', 'estimated_time_minutes': 60, 'learning_objectives': ['Understand the purpose and usage of the useState hook.', 'Learn how to declare and update state variables.', 'Explore common patterns and best practices for using useState.'], 'sections': [{'title': 'Introduction to useState', 'content': 'The useState hook is a fundamental feature in React that allows functional components to have state. It enables you to add React state to function components.', 'code_examples': ["import React, { useState } from'react';\n\nfunction Example() {\n  const [count, setCount] = useState(0);\n\n  return (\n    <div>\n      <p>You clicked {count} times</p>\n      <button onClick={() => setCount(count + 1)}>\n        Click me\n      </button>\n    </div>\n  );\n}"], 'key_points': ['useState returns a pair: the current state value and a function that lets you update it.', 'The initial state is passed as an argument to useState.']}, {'title': 'Declaring Multiple State Variables', 'content': 'You can declare multiple state variables in a single component by calling useState multiple times.', 'code_examples': ['import React, { useState } from\'react\';\n\nfunction Example() {\n  const [count, setCount] = useState(0);\n  const [name, setName] = useState(\'\');\n\n  return (\n    <div>\n      <p>You clicked {count} times</p>\n      <button onClick={() => setCount(count + 1)}>\n        Click me\n      </button>\n      <input type="text" value={name} onChange={(e) => setName(e.target.value)} />\n    </div>\n  );\n}'], 'key_points': ['Each call to useState declares a separate state variable.', 'State updates are independent of each other.']}, {'title': 'Updating State Based on Previous State', 'content': 'When updating state based on the previous state, use a function form of the state updater.', 'code_examples': ["import React, { useState } from'react';\n\nfunction Example() {\n  const [count, setCount] = useState(0);\n\n  return (\n    <div>\n      <p>You clicked {count} times</p>\n      <button onClick={() => setCount(prevCount => prevCount + 1)}>\n        Click me\n      </button>\n    </div>\n  );\n}"], 'key_points': ['Use the function form to ensure you are working with the most recent state.', 'This is particularly useful in asynchronous operations or when state updates may be batched.']}], 'summary': 'In this module, you learned about the useState hook, how to declare and update state variables, and best practices for using it effectively in React components.', 'exercises': ['Create a counter component that increments and decrements a value using useState.', 'Build a form with multiple input fields, each managed by its own state variable.'], 'quiz_topics': ['What does the useState hook return?', 'How do you update state based on the previous state?', 'Can you declare multiple state variables in a single component?'], 'further_reading': ['React Official Documentation on Hooks: https://reactjs.org/docs/hooks-state.html', 'Advanced State Management with useState: https://www.freecodecamp.org/news/react-hooks-usestate-tutorial/']}
+
+==================================================
+> Assessment Engine (Start)
+==================================================
+{'assessment_id': 'assess_aecd87193d094fd78a6290c1c6298a1b', 'topic': 'React Hooks', 'questions': [{'id': 'q1', 'question': 'Which hook is used to manage state in a functional component?', 'options': ['A) useEffect', 'B) useState', 'C) useContext', 'D) useReducer'], 'correct_answer': 'B', 'explanation': 'The useState hook is used to manage state in a functional component.', 'difficulty': 'intermediate', 'topic': 'React Hooks'}, {'id': 'q2', 'question': 'What does the useEffect hook do?', 'options': ['A) Manages state', 'B) Performs side effects', 'C) Provides context', 'D) Handles routing'], 'correct_answer': 'B', 'explanation': 'The useEffect hook is used to perform side effects in functional components.', 'difficulty': 'intermediate', 'topic': 'React Hooks'}, {'id': 'q3', 'question': 'How do you clean up side effects in useEffect?', 'options': ['A) Return a cleanup function', 'B) Use componentWillUnmount', 'C) Set state to null', 'D) Use useCleanup hook'], 'correct_answer': 'A', 'explanation': 'You can clean up side effects in useEffect by returning a cleanup function.', 'difficulty': 'intermediate', 'topic': 'React Hooks'}, {'id': 'q4', 'question': 'Which hook is used to share state across components without passing props manually at every level?', 'options': ['A) useContext', 'B) useState', 'C) useReducer', 'D) useMemo'], 'correct_answer': 'A', 'explanation': 'The useContext hook is used to share state across components without passing props manually at every level.', 'difficulty': 'intermediate', 'topic': 'React Hooks'}, {'id': 'q5', 'question': 'What is the primary use of the useReducer hook?', 'options': ['A) Managing complex state logic', 'B) Performing side effects', 'C) Providing context', 'D) Optimizing performance'], 'correct_answer': 'A', 'explanation': 'The useReducer hook is primarily used for managing complex state logic that involves multiple sub-values or when the next state depends on the previous one.', 'difficulty': 'intermediate', 'topic': 'React Hooks'}], 'total_questions': 5}
+
+==================================================
+> Assessment Engine (Answer)
+==================================================
+{'detail': 'An error occurred (ValidationException) when calling the GetItem operation: The provided key element does not match the schema'}
+Traceback (most recent call last):
+  File "D:\TenaliAI\Backend\test_e2e.py", line 157, in <module>
+    run_tests()
+    ~~~~~~~~~^^
+  File "D:\TenaliAI\Backend\test_e2e.py", line 116, in run_tests
+    assert resp.status_code == 200
+           ^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

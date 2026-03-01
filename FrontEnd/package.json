@@ -1,0 +1,46 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbo",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
+    "axios": "^1.13.6",
+    "clsx": "latest",
+    "framer-motion": "^12.35.0",
+    "lucide-react": "^0.577.0",
+    "next": "latest",
+    "next-auth": "^4.24.13",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-dropzone": "^15.0.0",
+    "react-folder-tree": "^5.1.1",
+    "react-hook-form": "^7.71.2",
+    "react-is": "^19.2.4",
+    "react-markdown": "^10.1.0",
+    "reactflow": "^11.11.4",
+    "recharts": "^3.7.0",
+    "tailwind-merge": "latest",
+    "zod": "^4.3.6",
+    "zustand": "^5.0.11"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.2.1",
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "autoprefixer": "^10.4.27",
+    "eslint": "latest",
+    "eslint-config-next": "latest",
+    "install": "^0.13.0",
+    "postcss": "^8.5.8",
+    "tailwindcss": "^4.2.1",
+    "typescript": "^5.9.3",
+    "typescriptnpm": "^1.0.1"
+  }
+}
