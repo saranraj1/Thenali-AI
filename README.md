@@ -1,4 +1,4 @@
-# Bharat AI Operational Hub (Thenali AI)
+# Thenali AI (Bharat AI Operational Hub)
 
 An AI-powered developer intelligence and learning platform. This full-stack system rapidly clones repositories, securely runs Python logic in sandboxed virtual sessions, and guides developers via conversational AI, roadmap planning, and intelligent dynamic open-source contribution metrics.
 
