@@ -177,6 +177,19 @@ def _parse_nova_response(result: dict) -> str:
 
 # ─── Public API ───────────────────────────────────────────────────────────────
 
+def test_bedrock_connection():
+    client = get_bedrock_client()
+    response = client.converse(
+        modelId=os.getenv("BEDROCK_MODEL_ID"),
+        messages=[
+            {
+                "role": "user",
+                "content": [{"text": "Say hello in one sentence"}]
+            }
+        ]
+    )
+    return response["output"]["message"]["content"][0]["text"]
+
 def invoke_model(
     prompt: str,
     system_prompt: str | None = None,
