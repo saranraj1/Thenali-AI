@@ -295,6 +295,7 @@ async def _process_repo_background(repo_id: str, repo_url: str, user_id: str):
         logger.info(f"Repository {repo_id} fully processed.")
 
     except Exception as e:
+        logger.error("Repo intelligence failed", exc_info=True)
         logger.error(f"Background repo processing failed for {repo_id}: {e}")
         clean_error = str(e).split("\n")[0][:200]   # first line only, no traceback
         _update_repo_status(repo_id, "error", clean_error)

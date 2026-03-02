@@ -92,6 +92,12 @@ async def start_assessment(
         mode=mode,
     )
 
+    if not questions:
+        raise HTTPException(
+            status_code=502,
+            detail="Assessment generation failed: Bedrock returned empty output."
+        )
+
     assessment = {
         "id": assessment_id,
         "assessment_id": assessment_id,

@@ -30,13 +30,16 @@ export const learningService = {
     getCurrentLesson: async (lessonId?: string) => {
         // Backend module generation takes `topic`. If lessonId provided we use it.
         const { data } = await apiClient.post("/learning/module", { topic: lessonId || "general" });
+        const sectionsText = data.sections?.map((s: any) => s.content).join("\n\n") || "";
+        const codeText = data.code_examples?.map((c: any) => c.code).join("\n\n") || "";
+
         return {
-            title: data.title,
-            content: data.summary + "\n\n" + data.sections?.map((s: any) => s.content + "\n" + (s.code_examples?.[0] || "")).join("\n\n"),
+            title: data.title || lessonId,
+            content: sectionsText + "\n\n" + codeText,
             audio_url: "", // Can be filled by voiceService later
-            quiz_question: data.quiz_topics?.[0] || "No quiz available.",
-            viva_question: data.quiz_topics?.[1] || "Explain what you learned.",
-            practice_code: data.sections?.[0]?.code_examples?.[0] || "// Write code here"
+            quiz_question: data.quiz_questions?.[0]?.question || "No quiz available.",
+            viva_question: data.viva_questions?.[0]?.question || "Explain what you learned.",
+            practice_code: data.sandbox_starter_code || data.code_examples?.[0]?.code || "// Write code here"
         };
     }
 };

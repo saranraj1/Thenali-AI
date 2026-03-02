@@ -33,7 +33,7 @@ from tenacity import (
     wait_exponential, retry_if_exception_type
 )
 from botocore.exceptions import ClientError
-
+from fastapi import HTTPException
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -234,7 +234,10 @@ def invoke_model(
         return _execute()
     except Exception as e:
         logger.error(f"[invoke_model] Bedrock invocation error: {e}", exc_info=True)
-        return f"Error: Model temporarily unavailable — {type(e).__name__}: {e}"
+        raise HTTPException(
+            status_code=502,
+            detail=f"Bedrock invocation failed: {str(e)}"
+        )
 
 async def invoke_model_async(
     prompt: str,
@@ -323,7 +326,10 @@ def invoke_model_structured(
         return _execute()
     except Exception as e:
         logger.error(f"[invoke_model_structured] Bedrock invocation error: {e}", exc_info=True)
-        return {"error": f"Model temporarily unavailable — {type(e).__name__}: {e}"}
+        raise HTTPException(
+            status_code=502,
+            detail=f"Bedrock invocation failed: {str(e)}"
+        )
 
 async def invoke_model_structured_async(
     prompt: str,
