@@ -2,7 +2,7 @@ import axios from "axios";
 
 const apiClient = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BASE || "http://localhost:8000/api",
-    timeout: 60000,
+    timeout: 300000, // 5 minutes (for long AI operations like repo analysis)
     headers: {
         "Content-Type": "application/json",
     },
