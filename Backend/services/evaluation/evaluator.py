@@ -193,6 +193,18 @@ Return JSON array:
             system_prompt="You are a technical education expert specializing in software engineering assessments.",
             schema_description="Array of quiz question objects",
         )
+        
+        if isinstance(result, dict):
+            if "questions" in result:
+                return result["questions"]
+            if "quiz" in result:
+                return result["quiz"]
+            # Fallback for arbitrary root key wrapper
+            for val in result.values():
+                if isinstance(val, list):
+                    return val
+            return []
+            
         return result if isinstance(result, list) else []
 
 

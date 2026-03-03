@@ -301,8 +301,16 @@ Return JSON array:
             schema_description="Array of quiz question objects"
         )
 
-        if isinstance(res, dict) and "questions" in res:
-            return res["questions"]
+        if isinstance(res, dict):
+            if "questions" in res:
+                return res["questions"]
+            if "quiz" in res:
+                return res["quiz"]
+            # Fallback for arbitrary root key wrapper
+            for val in res.values():
+                if isinstance(val, list):
+                    return val
+            return []
 
         return res if isinstance(res, list) else []
 

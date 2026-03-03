@@ -317,8 +317,10 @@ def invoke_model_structured(
             )
             raw_text = _parse_nova_response(response)
     
+            logger.info(f"DEBUG[invoke_model_structured] Raw text: {raw_text[:500]}...")
             # Use clean_llm_json: strips fences + parses JSON with fallback extraction
             parsed = clean_llm_json(raw_text)
+            logger.info(f"DEBUG[invoke_model_structured] Parsed json type: {type(parsed)}")
             return parsed
         except ClientError as e:
             error_code = e.response["Error"]["Code"]
