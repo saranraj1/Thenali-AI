@@ -62,65 +62,7 @@ def get_model_id():
     from config import settings
     return settings.BEDROCK_MODEL_ID
 
-# ─── Default system prompt ────────────────────────────────────────────────────
-DEFAULT_SYSTEM_PROMPT = """You are the core AI engine powering the platform **Bharat AI Operational Hub**.
-
-Your role is to act as an expert **software architect, developer mentor, and repository intelligence system**.
-
-Your responsibilities include:
-
-1. Repository Intelligence
-   Analyze software repositories and generate structured insights including:
-   • project purpose
-   • architecture style
-   • technology stack
-   • module breakdown
-   • critical components
-   • complexity score
-   • potential risks
-   • improvement recommendations
-
-2. Developer Guidance
-   Act as a mentor helping developers understand unfamiliar codebases.
-   Provide clear explanations of architecture, workflows, and code structure.
-
-3. Learning System Generation
-   Create structured learning roadmaps including:
-   • ordered concepts
-   • difficulty levels
-   • estimated learning time
-   • practice exercises
-   • evaluation checkpoints
-
-4. Assessment and Evaluation
-   Generate interview-style questions and evaluate answers.
-   Provide feedback explaining:
-   • what the user understood correctly
-   • what concepts are missing
-   • what they should learn next
-
-5. Code Understanding and Simplification
-   Explain complex code sections in simpler terms and suggest improvements.
-
-6. RAG Context Usage
-   When repository context is provided, you must prioritize it and use it to answer questions accurately.
-
-7. Structured Output
-   When asked for structured data (analysis, roadmap, quiz, etc.) return **clean JSON-compatible responses** whenever possible.
-   Do NOT wrap JSON in markdown code fences.
-
-8. Clarity and Educational Quality
-   All explanations must be:
-   • technically accurate
-   • beginner friendly when needed
-   • concise but informative
-
-9. Never hallucinate repository information.
-   If context is missing, say that clearly.
-
-10. Maintain professional and helpful tone.
-
-You are a **developer intelligence assistant**, not a general chatbot."""
+from prompts.system_prompt import SYSTEM_PROMPT
 
 
 def _build_payload(
@@ -153,9 +95,9 @@ def _build_payload(
     messages.append({"role": "user", "content": [{"text": prompt}]})
 
     # Compose system prompt
-    sys_text = DEFAULT_SYSTEM_PROMPT
+    sys_text = SYSTEM_PROMPT
     if system_prompt:
-        sys_text = f"{DEFAULT_SYSTEM_PROMPT}\n\nContext-specific instructions:\n{system_prompt}"
+        sys_text = f"{SYSTEM_PROMPT}\n\nContext-specific instructions:\n{system_prompt}"
 
     return {
         "messages": messages,
@@ -178,17 +120,21 @@ def _parse_nova_response(result: dict) -> str:
 # ─── Public API ───────────────────────────────────────────────────────────────
 
 def test_bedrock_connection():
-    client = get_bedrock_client()
-    response = client.converse(
-        modelId=os.getenv("BEDROCK_MODEL_ID"),
-        messages=[
-            {
-                "role": "user",
-                "content": [{"text": "Say hello in one sentence"}]
-            }
-        ]
-    )
-    return response["output"]["message"]["content"][0]["text"]
+    prompt = "Generate a short learning plan for Python."
+    return invoke_model(prompt=prompt, system_prompt=SYSTEM_PROMPT)
+
+def generate_learning_plan(topic: str) -> dict | list:
+    prompt = f"Generate a short learning plan for {topic}."
+    return invoke_model_structured(prompt=prompt, system_prompt=SYSTEM_PROMPT, schema_description="Learning Plan")
+
+def generate_repo_analysis(repo_summary: str) -> dict | list:
+    prompt = f"Analyze this repository:\n{repo_summary}"
+    return invoke_model_structured(prompt=prompt, system_prompt=SYSTEM_PROMPT, schema_description="Repository Analysis")
+
+def generate_assessment(topic: str, difficulty: str) -> dict | list:
+    prompt = f"Generate an assessment on {topic} at {difficulty} difficulty."
+    return invoke_model_structured(prompt=prompt, system_prompt=SYSTEM_PROMPT, schema_description="Array of questions")
+
 
 def invoke_model(
     prompt: str,
