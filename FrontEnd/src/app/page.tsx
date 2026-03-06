@@ -331,7 +331,7 @@ export default function HomePage() {
                                 </div>
                                 <div className="flex flex-col gap-4">
                                     <span className="font-bold text-white/20 uppercase tracking-widest text-xs">Signal</span>
-                                    <Link href="https://github.com/saranraj1/AI-FOR-BHARAT-_-Z-FIGHTERS" target="_blank" className="text-white/40 hover:text-blue-400 transition-colors flex items-center gap-2">
+                                    <Link href="https://github.com/LEGIONM3/AI-for-bharat" target="_blank" className="text-white/40 hover:text-blue-400 transition-colors flex items-center gap-2">
                                         <Github size={12} />
                                         GitHub Hub
                                     </Link>
