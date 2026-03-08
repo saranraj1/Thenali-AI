@@ -139,15 +139,19 @@ async def timeout_middleware(request: Request, call_next):
     
     # Repo analysis can take longer
     if "/repos/upload" in path:
-        timeout = 30  # Upload itself is fast
+        timeout = 30  # Upload itself is fast — bg task runs separately
+    elif "/repos/analyze" in path:
+        timeout = 180  # Re-trigger full Bedrock analysis: up to 3 min
     elif "/repos/chat" in path:
-        timeout = 60  # RAG + AI response
+        timeout = 90   # RAG + AI response
     elif "/voice/transcribe-answer" in path:
         timeout = 120  # Whisper transcription: local CPU, up to 60s
+    elif "/assessment/voice/transcribe-answer" in path:
+        timeout = 120  # Same — Whisper
     elif "/contribution/analyze" in path:
-        timeout = 60  # AI analysis
+        timeout = 60   # AI analysis
     else:
-        timeout = 30  # Default
+        timeout = 30   # Default
     
     try:
         return await asyncio.wait_for(

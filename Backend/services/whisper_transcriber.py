@@ -17,66 +17,64 @@ logger = logging.getLogger(__name__)
 # winget installs it under AppData but doesn't always update the current
 # process PATH. We probe common locations and inject whichever we find.
 def _ensure_ffmpeg_in_path() -> None:
-    """Add ffmpeg to current process PATH if not already there."""
-    # Check all users under AppData (winget default location)
-    _winget_glob_roots = [
-        os.path.join(os.environ.get("LOCALAPPDATA", ""), "Microsoft", "WinGet", "Packages"),
-        r"C:\Users\rmohi\AppData\Local\Microsoft\WinGet\Packages",
-    ]
-    # Static well-known locations
-    _static_locations = [
-        # winget-specific known path from this machine
-        r"C:\Users\rmohi\AppData\Local\Microsoft\WinGet\Packages\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\ffmpeg-8.0.1-full_build\bin",
-        r"C:\ffmpeg\bin",
-        r"C:\Program Files\ffmpeg\bin",
-        r"C:\Program Files (x86)\ffmpeg\bin",
-        os.path.expanduser(r"~\ffmpeg\bin"),
-        r"C:\ProgramData\chocolatey\bin",
-        r"C:\tools\ffmpeg\bin",
-        r"C:\tools\ffmpeg-full_build\bin",
-    ]
+    """
+    Add ffmpeg to current process PATH if not already there.
+    Cross-platform: works on Linux (EC2) and Windows (dev machine).
+    """
+    import shutil, platform
 
-    # Also scan winget packages directory for any ffmpeg install
-    _dynamic_locations = []
-    for root in _winget_glob_roots:
-        if os.path.isdir(root):
+    # Already on PATH — nothing to do
+    if shutil.which("ffmpeg"):
+        return
+
+    system = platform.system()
+
+    if system == "Windows":
+        _static_locations = [
+            r"C:\ffmpeg\bin",
+            r"C:\Program Files\ffmpeg\bin",
+            r"C:\Program Files (x86)\ffmpeg\bin",
+            r"C:\ProgramData\chocolatey\bin",
+            r"C:\tools\ffmpeg\bin",
+            os.path.expanduser(r"~\ffmpeg\bin"),
+        ]
+        # Dynamically scan WinGet packages directory for any ffmpeg install
+        winget_root = os.path.join(
+            os.environ.get("LOCALAPPDATA", ""),
+            "Microsoft", "WinGet", "Packages"
+        )
+        if os.path.isdir(winget_root):
             try:
-                for pkg in os.listdir(root):
-                    if "ffmpeg" in pkg.lower() or "FFmpeg" in pkg:
-                        bin_dir = os.path.join(root, pkg)
-                        # Walk one level to find bin/
-                        for subdir in os.listdir(bin_dir):
-                            candidate = os.path.join(bin_dir, subdir, "bin")
+                for pkg in os.listdir(winget_root):
+                    if "ffmpeg" in pkg.lower():
+                        pkg_path = os.path.join(winget_root, pkg)
+                        for sub in os.listdir(pkg_path):
+                            candidate = os.path.join(pkg_path, sub, "bin")
                             if os.path.isdir(candidate):
-                                _dynamic_locations.append(candidate)
-                            # Also check if the pkg itself has bin/
-                        if os.path.isdir(os.path.join(bin_dir, "bin")):
-                            _dynamic_locations.append(os.path.join(bin_dir, "bin"))
+                                _static_locations.insert(0, candidate)
+                        if os.path.isdir(os.path.join(pkg_path, "bin")):
+                            _static_locations.insert(0, os.path.join(pkg_path, "bin"))
             except Exception:
                 pass
+    else:
+        # Linux / macOS (EC2 Ubuntu, etc.)
+        _static_locations = [
+            "/usr/bin",
+            "/usr/local/bin",
+            "/snap/bin",
+            "/opt/homebrew/bin",   # macOS with Homebrew
+        ]
 
-    all_locations = _dynamic_locations + _static_locations
     current_path = os.environ.get("PATH", "")
+    exe_name = "ffmpeg.exe" if system == "Windows" else "ffmpeg"
 
-    for loc in all_locations:
-        ffmpeg_exe = os.path.join(loc, "ffmpeg.exe")
+    for loc in _static_locations:
+        ffmpeg_exe = os.path.join(loc, exe_name)
         if os.path.isfile(ffmpeg_exe) and loc not in current_path:
             os.environ["PATH"] = loc + os.pathsep + current_path
             logger.info(f"Added ffmpeg to PATH: {loc}")
             return
 
-    # Also try refreshing from registry (picks up winget PATH changes)
-    try:
-        import winreg
-        with winreg.OpenKey(
-            winreg.HKEY_CURRENT_USER,
-            r"Environment"
-        ) as key:
-            user_path, _ = winreg.QueryValueEx(key, "PATH")
-            if user_path and user_path not in current_path:
-                os.environ["PATH"] = user_path + os.pathsep + current_path
-    except Exception:
-        pass
 
 
 # Run at import time so the PATH is set before Whisper tries to call ffmpeg
@@ -116,24 +114,10 @@ def _verify_ffmpeg() -> str:
     if ffmpeg_path:
         return ffmpeg_path
 
-    # Absolute last resort — check known paths directly
-    fallback_paths = [
-        r"C:\Users\rmohi\AppData\Local\Microsoft\WinGet\Packages\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\ffmpeg-8.0.1-full_build\bin\ffmpeg.exe",
-        r"C:\ffmpeg\bin\ffmpeg.exe",
-        r"C:\Program Files\ffmpeg\bin\ffmpeg.exe",
-        os.path.expanduser(r"~\ffmpeg\bin\ffmpeg.exe"),
-    ]
-    for p in fallback_paths:
-        if os.path.isfile(p):
-            ffmpeg_dir = os.path.dirname(p)
-            os.environ["PATH"] = ffmpeg_dir + os.pathsep + os.environ.get("PATH", "")
-            logger.info(f"Found ffmpeg via fallback path: {p}")
-            return p
-
     raise RuntimeError(
         "ffmpeg not found. Whisper requires ffmpeg to decode audio.\n"
-        "Fix: open a NEW terminal (not this one) and run:\n"
-        "  winget install ffmpeg\n"
+        "Fix (Linux/EC2):  sudo apt update && sudo apt install -y ffmpeg\n"
+        "Fix (Windows):    winget install ffmpeg   (then restart server)\n"
         "Then restart the backend server."
     )
 

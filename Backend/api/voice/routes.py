@@ -25,50 +25,52 @@ async def transcribe_audio(
     current_user: dict = Depends(get_current_user),
 ):
     """
-    Upload audio to S3, transcribe with Amazon Transcribe.
-    Returns transcript text.
-    """
-    user_id = current_user["sub"]
+    Transcribe audio using local Whisper model.
 
-    # Validate content type
-    allowed_types = {"audio/mpeg", "audio/mp3", "audio/wav", "audio/webm", "audio/ogg", "audio/flac"}
-    if file.content_type not in allowed_types:
+    AWS Transcribe is NOT available in ap-south-1, so we use Whisper (CPU)
+    consistently with the assessment voice endpoint.
+
+    Accepts: webm, wav, mp4 (Safari), ogg, mp3, flac
+    Returns: { transcript, language_code }
+    """
+    content_type = file.content_type or "audio/webm"
+
+    # Some browsers (Safari, older Android) send application/octet-stream
+    # for recorded audio — be lenient and accept it.
+    allowed_types = {
+        "audio/mpeg", "audio/mp3", "audio/wav",
+        "audio/webm", "audio/ogg", "audio/flac",
+        "audio/mp4", "video/mp4",          # Safari records mp4
+        "application/octet-stream",        # fallback
+    }
+    if content_type not in allowed_types:
         raise HTTPException(
             status_code=400,
-            detail=f"Unsupported audio format: {file.content_type}. Allowed: {', '.join(allowed_types)}",
+            detail=f"Unsupported audio format: {content_type}. "
+                   f"Allowed: webm, wav, mp4, ogg, mp3, flac",
         )
-
-    # Upload to S3
-    ext = file.filename.rsplit(".", 1)[-1] if file.filename and "." in file.filename else "mp3"
-    s3_key = f"voice/{user_id}/{uuid.uuid4().hex}.{ext}"
 
     try:
-        s3_service.ensure_bucket_exists(settings.S3_VOICE_BUCKET)
-        s3_service.upload_file(
-            bucket=settings.S3_VOICE_BUCKET,
-            key=s3_key,
-            file_obj=file.file,
-            content_type=file.content_type or "audio/mpeg",
-        )
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"S3 upload failed: {e}")
+        audio_bytes = await file.read()
+        if len(audio_bytes) < 500:
+            raise HTTPException(
+                status_code=400,
+                detail="Audio too short — please record a longer answer.",
+            )
 
-    # Transcribe
-    try:
-        s3_uri = f"s3://{settings.S3_VOICE_BUCKET}/{s3_key}"
-        transcript = transcribe_service.transcribe_s3_audio(
-            s3_uri=s3_uri,
-            language_code=language_code,
-        )
+        from services.whisper_transcriber import transcribe_async
+        transcript = await transcribe_async(audio_bytes, content_type)
+
         return {
             "transcript": transcript,
-            "s3_key": s3_key,
             "language_code": language_code,
         }
-    except TimeoutError as e:
-        raise HTTPException(status_code=504, detail=str(e))
+    except HTTPException:
+        raise
     except Exception as e:
+        logger.error(f"Voice transcription error: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Transcription failed: {e}")
+
 
 
 @router.post("/speak")
